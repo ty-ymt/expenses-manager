@@ -1,0 +1,14 @@
+export type Role = "admin" | "user" | "guest";
+export type MenuIcon = "projects" | "expenses" | "users";
+
+export type HeaderMenuItem = {
+  label: string;
+  href: string;
+  icon?: MenuIcon;
+};
+
+export type UserMenuItem = {
+  displayName: string;
+  displayEmail: string;
+  //onSignOut: () => Promise<void> | void;
+};

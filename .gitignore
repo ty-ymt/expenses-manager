@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/src/generated/prisma
+
+# npm security check
+check-vulnerabilities.ps1
+vulnerability-check-result.txt

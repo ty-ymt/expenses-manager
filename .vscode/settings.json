@@ -1,0 +1,9 @@
+{
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  },
+  "editor.formatOnSave": true,
+  "cSpell.words": ["tabler"],
+  "biome.runFromTemporaryLocation": false,
+  "biome.configurationPath": ""
+}
