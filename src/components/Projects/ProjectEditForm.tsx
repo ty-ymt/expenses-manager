@@ -2,14 +2,17 @@
 
 import {
   Alert,
-  Divider,
+  Checkbox,
+  Group,
   Paper,
   SimpleGrid,
   Stack,
+  Text,
   Textarea,
   TextInput,
 } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
+import { modals } from "@mantine/modals";
 import { useActionState, useState } from "react";
 import {
   deleteProjectAction,
@@ -22,6 +25,7 @@ import {
   DangerButton,
   SubmitButton,
 } from "../ui/Form/FormButtons";
+import { FormRow } from "../ui/Form/FormRow";
 
 export const ProjectEditForm = ({
   project,
@@ -32,91 +36,134 @@ export const ProjectEditForm = ({
     updateProjectAction,
     null
   );
-  const [delState, delAction, delPending] = useActionState<
-    ActionState,
-    FormData
-  >(deleteProjectAction, null);
+
+  const [delState, setDelState] = useState<ActionState>(null);
+  const [delPending, setDelPending] = useState(false);
 
   const [startDate, setStartDate] = useState<string | null>(
     project.start_dt || null
   );
   const [endDate, setEndDate] = useState<string | null>(project.end_dt || null);
+  const [completed, setCompleted] = useState<boolean>(project.completed);
 
   return (
     <Paper p="md" withBorder radius="sm">
-      <form action={upAction}>
-        <Stack gap="sm">
-          {upState ? (
-            <Alert color="red" title="エラー">
-              {upState.message}
-            </Alert>
-          ) : null}
+      <Stack gap="sm">
+        {upState ? (
+          <Alert color="red" title="エラー">
+            {upState.message}
+          </Alert>
+        ) : null}
 
-          <input type="hidden" name="id" value={project.id} />
+        {delState ? (
+          <Alert color="red" title="削除エラー">
+            {delState.message}
+          </Alert>
+        ) : null}
 
-          <TextInput
-            name="cd"
-            label="案件コード"
-            defaultValue={project.cd}
-            required
-          />
-          <TextInput
-            name="name"
-            label="案件名"
-            defaultValue={project.name}
-            required
-          />
-          <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="sm">
-            <DateInput
-              label="開始日"
-              value={startDate}
-              onChange={setStartDate}
-              clearable
-              valueFormat="YYYY-MM-DD"
+        <form action={upAction}>
+          <Stack gap="sm">
+            <input type="hidden" name="id" value={project.id} />
+            <input type="hidden" name="start_dt" value={startDate ?? ""} />
+            <input type="hidden" name="end_dt" value={endDate ?? ""} />
+            <input
+              type="hidden"
+              name="completed"
+              value={completed ? "on" : ""}
             />
-            <DateInput
-              label="終了日"
-              value={endDate}
-              onChange={setEndDate}
-              clearable
-              valueFormat="YYYY-MM-DD"
-            />
-          </SimpleGrid>
 
-          <input type="hidden" name="start_dt" value={startDate ?? ""} />
-          <input type="hidden" name="end_dt" value={endDate ?? ""} />
+            <FormRow label="案件コード">
+              <TextInput name="cd" defaultValue={project.cd} required />
+            </FormRow>
 
-          <Textarea name="remarks" label="備考" autosize minRows={3} />
+            <FormRow label="案件名">
+              <TextInput name="name" defaultValue={project.name} required />
+            </FormRow>
 
-          <FormActions>
-            <CancelLinkButton href={`/projects/${project.id}`}>
-              キャンセル
-            </CancelLinkButton>
-            <SubmitButton loading={upPending}>更新</SubmitButton>
-          </FormActions>
-        </Stack>
-      </form>
+            <FormRow label="日付">
+              <SimpleGrid cols={{ base: 1, sm: 4 }} spacing="sm">
+                <DateInput
+                  label="開始日"
+                  value={startDate}
+                  onChange={setStartDate}
+                  clearable
+                  valueFormat="YYYY-MM-DD"
+                />
+                <DateInput
+                  label="終了日"
+                  value={endDate}
+                  onChange={setEndDate}
+                  clearable
+                  valueFormat="YYYY-MM-DD"
+                />
+                <Checkbox
+                  label="完了"
+                  checked={completed}
+                  onChange={(e) => setCompleted(e.currentTarget.checked)}
+                  mt={26}
+                />
+                <TextInput
+                  label="完了日"
+                  value={project.completed_at ?? ""}
+                  readOnly
+                  placeholder=""
+                />
+              </SimpleGrid>
+            </FormRow>
 
-      <Divider />
-      {delState ? (
-        <Alert color="red" title="削除エラー">
-          {delState.message}
-        </Alert>
-      ) : null}
+            <FormRow label="備考">
+              <Textarea
+                name="remarks"
+                defaultValue={project.remarks}
+                autosize
+                minRows={3}
+              />
+            </FormRow>
 
-      <form
-        action={delAction}
-        onSubmit={(e) => {
-          if (!confirm("この案件を削除します。よろしいですか？")) {
-            e.preventDefault();
-          }
-        }}
-      >
-        <input type="hidden" name="id" value={project.id} />
-        <FormActions justify="flex-end">
-          <DangerButton loading={delPending}>削除</DangerButton>
-        </FormActions>
-      </form>
+            <FormActions>
+              <Group justify="space-between" style={{ width: "100%" }}>
+                <DangerButton
+                  type="button"
+                  loading={delPending}
+                  onClick={() => {
+                    modals.openConfirmModal({
+                      title: "削除確認",
+                      children: (
+                        <Text size="sm">
+                          この案件を削除します。よろしいですか？
+                        </Text>
+                      ),
+                      labels: { confirm: "削除する", cancel: "キャンセル" },
+                      confirmProps: { color: "red" },
+                      onConfirm: async () => {
+                        setDelState(null);
+                        setDelPending(true);
+                        try {
+                          const fd = new FormData();
+                          fd.set("id", project.id);
+
+                          const res = await deleteProjectAction(fd);
+                          if (res?.ok === false) setDelState(res);
+                        } finally {
+                          setDelPending(false);
+                        }
+                      },
+                    });
+                  }}
+                >
+                  削除
+                </DangerButton>
+                <Group gap="sm">
+                  <CancelLinkButton href={`/projects/${project.id}`}>
+                    キャンセル
+                  </CancelLinkButton>
+                  <SubmitButton loading={upPending}>更新</SubmitButton>
+                </Group>
+              </Group>
+            </FormActions>
+          </Stack>
+        </form>
+      </Stack>
     </Paper>
   );
 };

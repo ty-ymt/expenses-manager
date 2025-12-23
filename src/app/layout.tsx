@@ -7,6 +7,7 @@ import {
   MantineProvider,
   mantineHtmlProps,
 } from "@mantine/core";
+import { ModalsProvider } from "@mantine/modals";
 import type { Metadata } from "next";
 import HeaderServer from "@/components/Header/HeaderServer";
 import NavbarServer from "@/components/Navbar/NavbarServer";
@@ -30,11 +31,13 @@ export default function RootLayout({
       </head>
       <body>
         <MantineProvider defaultColorScheme="auto">
-          <ShellClient>
-            <HeaderServer />
-            <NavbarServer />
-            <Main>{children}</Main>
-          </ShellClient>
+          <ModalsProvider>
+            <ShellClient>
+              <HeaderServer />
+              <NavbarServer />
+              <Main>{children}</Main>
+            </ShellClient>
+          </ModalsProvider>
         </MantineProvider>
       </body>
     </html>

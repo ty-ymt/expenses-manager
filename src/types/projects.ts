@@ -26,6 +26,7 @@ export type ProjectEditFormData = {
   start_dt: string;
   end_dt: string;
   completed: boolean;
+  completed_at: string;
 };
 
 export const PROJECT_STATUS = {

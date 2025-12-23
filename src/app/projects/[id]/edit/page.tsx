@@ -2,7 +2,7 @@ import { Group, Title } from "@mantine/core";
 import { notFound } from "next/navigation";
 import { ProjectEditForm } from "@/components/Projects/ProjectEditForm";
 import { BackLink } from "@/components/ui/BackLink";
-import { toJstDay } from "@/lib/date";
+import { formatDateTime, toJstDay } from "@/lib/date";
 import { getProjectById } from "@/lib/projects/queries";
 
 export const ProjectEditPage = async ({
@@ -37,6 +37,7 @@ export const ProjectEditPage = async ({
           start_dt: startStr,
           end_dt: endStr,
           completed: project.completed,
+          completed_at: formatDateTime(project.completed_at, ""),
         }}
       />
     </>

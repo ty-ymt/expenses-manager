@@ -31,9 +31,11 @@ export const updateProjectAction = async (
   const remarks = String(formData.get("remarks") ?? "").trim();
   const startRaw = String(formData.get("start_dt") ?? "").trim();
   const endRaw = String(formData.get("end_dt") ?? "").trim();
+  const completedRaw = String(formData.get("completed") ?? "");
 
   const startDt = startRaw ? toJstDay(startRaw) : null;
   const endDt = endRaw ? toJstDay(endRaw) : null;
+  const completed = completedRaw === "on";
 
   if (!cd) return { ok: false, message: "案件コードを入力してください" };
   if (!name) return { ok: false, message: "案件名を入力してください" };
@@ -50,6 +52,8 @@ export const updateProjectAction = async (
         remarks: remarks ? remarks : null,
         start_dt: startDt?.toJSDate() ?? null,
         end_dt: endDt?.toJSDate() ?? null,
+        completed,
+        completed_at: completed ? new Date() : null,
       },
     });
   } catch (error: unknown) {
@@ -66,7 +70,6 @@ export const updateProjectAction = async (
 };
 
 export const deleteProjectAction = async (
-  _prev: ActionState,
   formData: FormData
 ): Promise<ActionState> => {
   const parsed = parseProjectId(formData);

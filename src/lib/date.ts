@@ -4,6 +4,7 @@ const ZONE = "Asia/Tokyo";
 const LOCALE = "ja";
 
 export const DEFAULT_DATE_FORMAT = "yyyy/LL/dd(EEE)";
+export const DEFAULT_DATETIME_FORMAT = "yyyy/LL/dd(EEE) HH:mm";
 
 // JST変換（DateTime）
 const toJstDateTime = (value: Date | string) => {
@@ -50,6 +51,14 @@ export const formatDateRange = (
   }
 
   return `${startLabel} ～ ${endLabel}`;
+};
+
+export const formatDateTime = (
+  value: Date | string | null | undefined,
+  emptyLabel = "未定",
+  fmt = DEFAULT_DATETIME_FORMAT
+) => {
+  return value ? toJstDateTime(value).toFormat(fmt) : emptyLabel;
 };
 
 // JSTの「今日（00:00）」
