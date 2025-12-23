@@ -14,7 +14,7 @@ import { useActionState, useState } from "react";
 import type { ActionState, ProjectAddAction } from "@/types/projects";
 import FormActions from "../ui/Form/FormActions";
 import { CancelLinkButton, SubmitButton } from "../ui/Form/FormButtons";
-import { FormRow } from "../ui/Form/FormRow";
+import { FormRow, RequiredFormRow } from "../ui/Form/FormRow";
 
 export const ProjectAddForm = ({ action }: { action: ProjectAddAction }) => {
   const [state, formAction, pending] = useActionState<ActionState, FormData>(
@@ -38,12 +38,12 @@ export const ProjectAddForm = ({ action }: { action: ProjectAddAction }) => {
           <input type="hidden" name="start_dt" value={startDate ?? ""} />
           <input type="hidden" name="end_dt" value={endDate ?? ""} />
 
-          <FormRow label="案件コード">
+          <RequiredFormRow label="案件コード">
             <TextInput name="cd" placeholder="案件コードを入力" required />
-          </FormRow>
-          <FormRow label="案件名">
+          </RequiredFormRow>
+          <RequiredFormRow label="案件名">
             <TextInput name="name" placeholder="案件名を入力" required />
-          </FormRow>
+          </RequiredFormRow>
           <FormRow label="日付">
             <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="sm">
               <DateInput

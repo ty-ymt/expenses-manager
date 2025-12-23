@@ -25,7 +25,7 @@ import {
   DangerButton,
   SubmitButton,
 } from "../ui/Form/FormButtons";
-import { FormRow } from "../ui/Form/FormRow";
+import { FormRow, RequiredFormRow } from "../ui/Form/FormRow";
 
 export const ProjectEditForm = ({
   project,
@@ -72,13 +72,13 @@ export const ProjectEditForm = ({
               value={completed ? "on" : ""}
             />
 
-            <FormRow label="案件コード">
+            <RequiredFormRow label="案件コード">
               <TextInput name="cd" defaultValue={project.cd} required />
-            </FormRow>
+            </RequiredFormRow>
 
-            <FormRow label="案件名">
+            <RequiredFormRow label="案件名">
               <TextInput name="name" defaultValue={project.name} required />
-            </FormRow>
+            </RequiredFormRow>
 
             <FormRow label="日付">
               <SimpleGrid cols={{ base: 1, sm: 4 }} spacing="sm">
