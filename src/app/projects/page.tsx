@@ -1,5 +1,5 @@
 import { Title } from "@mantine/core";
-import ProjectListClient from "@/components/Projects/ProjectsListClient";
+import ProjectListClient from "@/components/Projects/ProjectListClient";
 import { getAllProjects } from "@/lib/projects/queries";
 
 export const ProjectPage = async () => {

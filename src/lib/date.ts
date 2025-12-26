@@ -5,6 +5,7 @@ const LOCALE = "ja";
 
 export const DEFAULT_DATE_FORMAT = "yyyy/LL/dd(EEE)";
 export const DEFAULT_DATETIME_FORMAT = "yyyy/LL/dd(EEE) HH:mm";
+export const INPUT_DATE_FORMAT = "YYYY/MM/DD";
 
 // JST変換（DateTime）
 const toJstDateTime = (value: Date | string) => {

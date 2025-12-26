@@ -11,7 +11,7 @@ const STATUS_COLOR: Record<ProjectStatus, string> = {
 
 export const ProjectStatusBadge = ({ status }: { status: ProjectStatus }) => {
   return (
-    <Badge variant="light" color={STATUS_COLOR[status]}>
+    <Badge variant="light" color={STATUS_COLOR[status]} size="lg">
       {PROJECT_STATUS_LABEL[status]}
     </Badge>
   );

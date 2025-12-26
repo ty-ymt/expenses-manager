@@ -40,7 +40,14 @@ export const PROJECT_STATUS = {
 export type ProjectStatus =
   (typeof PROJECT_STATUS)[keyof typeof PROJECT_STATUS];
 
-export type ProjectFilter = "all" | ProjectStatus;
+export const PROJECT_STATUS_TABS: ProjectStatus[] = [
+  PROJECT_STATUS.NOT_STARTED,
+  PROJECT_STATUS.IN_PROGRESS,
+  PROJECT_STATUS.ENDED,
+  PROJECT_STATUS.UNDECIDED,
+];
+
+export type ProjectStatusTab = "all" | ProjectStatus;
 
 export const PROJECT_STATUS_LABEL: Record<ProjectStatus, string> = {
   undecided: "未定",
@@ -48,6 +55,11 @@ export const PROJECT_STATUS_LABEL: Record<ProjectStatus, string> = {
   in_progress: "運用中",
   ended: "終了",
   completed: "完了",
+};
+
+export type DateRangeFilter = {
+  from: string | null;
+  to: string | null;
 };
 
 export type ActionState = { ok: false; message: string } | null;

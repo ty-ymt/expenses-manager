@@ -92,7 +92,7 @@ export const ProjectDetailPage = async ({
               備考
             </Text>
             {project.remarks ? (
-              <Text style={{ whitespace: "pre-wrap" }}>{project.remarks}</Text>
+              <Text style={{ whiteSpace: "pre-wrap" }}>{project.remarks}</Text>
             ) : (
               <Text c="dimmed" size="sm">
                 （なし）

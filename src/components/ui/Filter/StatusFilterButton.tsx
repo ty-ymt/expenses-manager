@@ -1,9 +1,6 @@
 "use client";
 
 import {
-  ActionIcon,
-  Box,
-  Button,
   Checkbox,
   Divider,
   Group,
@@ -12,25 +9,26 @@ import {
   Stack,
   Text,
 } from "@mantine/core";
-import { IconChevronDown, IconX } from "@tabler/icons-react";
 import { useState } from "react";
-import { DEFAULT_STATUSES, STATUS_OPTIONS } from "@/lib/filters";
+import { STATUS_OPTIONS } from "@/lib/filters";
 import { PROJECT_STATUS_LABEL, type ProjectStatus } from "@/types/projects";
+import FilterButton from "./FilterButton";
 
 export const StatusFilterButton = ({
   selected,
   setSelected,
+  isStatusFiltering,
   label = "ステータス",
+  disabled = false,
 }: {
   selected: ProjectStatus[];
   setSelected: React.Dispatch<React.SetStateAction<ProjectStatus[]>>;
+  isStatusFiltering: boolean;
   label?: string;
+  disabled?: boolean;
 }) => {
   const [opened, setOpened] = useState(false);
-
-  const isDefault =
-    selected.length === DEFAULT_STATUSES.length &&
-    DEFAULT_STATUSES.every((s) => selected.includes(s));
+  if (disabled && opened) setOpened(false);
 
   const allChecked = selected.length === STATUS_OPTIONS.length;
   const indeterminate = selected.length > 0 && !allChecked;
@@ -45,7 +43,7 @@ export const StatusFilterButton = ({
     setSelected(allChecked ? [] : STATUS_OPTIONS);
   };
 
-  const clearToDefault = () => setSelected(DEFAULT_STATUSES);
+  const clear = () => setSelected([]);
 
   return (
     <Popover
@@ -54,37 +52,17 @@ export const StatusFilterButton = ({
       position="bottom-start"
       shadow="md"
       withinPortal
+      radius={12}
+      disabled={disabled}
     >
       <Popover.Target>
-        <Box pos="relative" display="inline-block">
-          <Button
-            variant={isDefault ? "outline" : "filled"}
-            color={isDefault ? "gray" : "blue"}
-            rightSection={<IconChevronDown size={16} />}
-            onClick={() => setOpened((v) => !v)}
-          >
-            {label}
-          </Button>
-
-          {!isDefault && (
-            <ActionIcon
-              size="sm"
-              radius="xl"
-              variant="filled"
-              color="red"
-              pos="absolute"
-              top={-6}
-              right={-6}
-              aria-label="フィルターをクリア"
-              onClick={(e) => {
-                e.stopPropagation();
-                clearToDefault();
-              }}
-            >
-              <IconX size={14} />
-            </ActionIcon>
-          )}
-        </Box>
+        <FilterButton
+          label={label}
+          isFiltering={isStatusFiltering}
+          onClick={() => setOpened((v) => !v)}
+          disabled={disabled}
+          onClear={disabled ? undefined : clear}
+        />
       </Popover.Target>
 
       <Popover.Dropdown>
