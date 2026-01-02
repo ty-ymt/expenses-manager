@@ -3,8 +3,9 @@ export type MenuIcon = "projects" | "expenses" | "users";
 
 export type HeaderMenuItem = {
   label: string;
-  href: string;
+  href?: string;
   icon?: MenuIcon;
+  children?: HeaderMenuItem[];
 };
 
 export type UserMenuItem = {

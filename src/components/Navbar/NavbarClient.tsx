@@ -1,6 +1,11 @@
 "use client";
 
-import { AppShellNavbar, NavLink, Stack } from "@mantine/core";
+import {
+  AppShellNavbar,
+  type MantineTheme,
+  NavLink,
+  Stack,
+} from "@mantine/core";
 import { IconFolder, IconReceipt, IconUsers } from "@tabler/icons-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -19,44 +24,61 @@ export const NavbarClient = ({
 }) => {
   const pathname = usePathname();
 
+  const renderItem = (item: HeaderMenuItem) => {
+    const isParent = !!item.children?.length;
+    const hasActiveChild =
+      item.children?.some((c) => c.href && pathname.startsWith(c.href)) ??
+      false;
+
+    const commonProps = {
+      label: item.label,
+      leftSection: item.icon ? iconMap[item.icon] : undefined,
+      defaultOpened: hasActiveChild,
+      py: 6,
+      fz: "sm" as const,
+      fw: 550,
+      children: item.children?.map(renderItem),
+    };
+
+    const parentStyles = (theme: MantineTheme) => ({
+      root: {
+        borderRadius: theme.radius.sm,
+        backgroundColor: hasActiveChild ? theme.colors.gray[1] : undefined,
+        "&:hover": {
+          backgroundColor: theme.colors.gray[1],
+        },
+      },
+      label: {
+        color: "inherit",
+      },
+    });
+
+    if (!item.href) {
+      return (
+        <NavLink
+          key={item.label}
+          {...commonProps}
+          defaultOpened={isParent && hasActiveChild}
+          styles={parentStyles}
+        />
+      );
+    }
+
+    return (
+      <NavLink
+        key={item.label}
+        {...commonProps}
+        component={Link}
+        href={item.href}
+      >
+        {item.children?.map(renderItem)}
+      </NavLink>
+    );
+  };
+
   return (
     <AppShellNavbar p="md">
-      <Stack gap="xs">
-        {menuItems.map((item) => {
-          const isActive =
-            item.href === "/"
-              ? pathname === "/"
-              : pathname.startsWith(item.href);
-          return (
-            <NavLink
-              key={item.href}
-              component={Link}
-              href={item.href}
-              label={item.label}
-              active={isActive}
-              leftSection={item.icon ? iconMap[item.icon] : undefined}
-              py={6}
-              fz="sm"
-              fw={550}
-              styles={(theme) => ({
-                root: {
-                  borderRadius: theme.radius.sm,
-                  backgroundColor: isActive ? theme.colors.blue[0] : undefined,
-                  color: isActive ? theme.colors.blue[7] : undefined,
-                  "&:hover": {
-                    backgroundColor: isActive
-                      ? theme.colors.blue[1]
-                      : theme.colors.gray[1],
-                  },
-                },
-                label: {
-                  color: "inherit",
-                },
-              })}
-            />
-          );
-        })}
-      </Stack>
+      <Stack gap="xs">{menuItems.map(renderItem)}</Stack>
     </AppShellNavbar>
   );
 };

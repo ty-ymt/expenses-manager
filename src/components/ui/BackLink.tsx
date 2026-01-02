@@ -3,14 +3,13 @@
 import { Group, Text } from "@mantine/core";
 import { IconChevronLeft } from "@tabler/icons-react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
-export const BackLink = ({
-  href,
-  label = "一覧へ戻る",
-}: {
-  href: string;
-  label?: string;
-}) => {
+export const BackLink = ({ label = "一覧へ戻る" }: { label?: string }) => {
+  const sp = useSearchParams();
+  const from = sp.get("from");
+
+  const href = from === "completed" ? "/projects/completed" : "/projects";
   return (
     <Link href={href} style={{ textDecoration: "none", cursor: "pointer" }}>
       <Group gap={4}>

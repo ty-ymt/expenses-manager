@@ -37,7 +37,7 @@ export const ProjectDetailPage = async ({
       <Group justify="space-between" align="flex-end" mb="md">
         <Title order={2}>案件詳細</Title>
 
-        <BackLink href="/projects" />
+        <BackLink />
       </Group>
 
       <Paper p="md" withBorder radius="sm">

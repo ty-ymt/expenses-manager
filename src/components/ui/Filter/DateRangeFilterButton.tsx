@@ -32,8 +32,6 @@ export const DateRangeFilterButton = ({
     return true;
   }, [draft.from, draft.to]);
 
-  const clearDraft = () => setDraft({ from: null, to: null });
-
   const apply = () => {
     if (!canApply) return;
     setValue(draft);

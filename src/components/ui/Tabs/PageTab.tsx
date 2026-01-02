@@ -22,6 +22,9 @@ export const PageTab = <T extends string>({
   tabWidth = 120,
   renderPanel,
 }: Props<T>) => {
+  if (items.length === 0) {
+    return <>{null}</>;
+  }
   return (
     <Tabs value={value} onChange={(v) => onChange(v as T)}>
       <Tabs.List>

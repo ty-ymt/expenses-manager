@@ -8,15 +8,17 @@ import ProjectStatusBadge from "./ProjectStatusBadge";
 
 export const ProjectListItems = ({
   projects,
+  from = "projects",
 }: {
   projects: ProjectListItem[];
+  from?: "projects" | "completed";
 }) => {
   return (
     <Stack gap="xs">
       {projects.map((p) => (
         <Paper
           component={Link}
-          href={`/projects/${p.id}`}
+          href={`/projects/${p.id}?from=${from}`}
           key={p.id}
           p="md"
           withBorder

@@ -18,6 +18,7 @@ import {
 } from "@/types/projects";
 import DateRangeFilterButton from "../ui/Filter/DateRangeFilterButton";
 import { StatusFilterButton } from "../ui/Filter/StatusFilterButton";
+import ForwardLink from "../ui/ForwardLink";
 import { PageTab, type TabItem } from "../ui/Tabs/PageTab";
 import ProjectListItems from "./ProjectListItems";
 
@@ -94,15 +95,8 @@ export const ProjectListClient = ({
           />
         </Group>
 
-        <Group gap="sm">
-          <Button
-            component={Link}
-            href={"/projects/completed"}
-            size="sm"
-            variant="default"
-          >
-            完了案件
-          </Button>
+        <Stack gap="sm" align="end">
+          <ForwardLink href="/projects/completed" label="完了案件" />
 
           <Button
             component={Link}
@@ -112,7 +106,7 @@ export const ProjectListClient = ({
           >
             新規作成
           </Button>
-        </Group>
+        </Stack>
       </Group>
 
       <PageTab<ProjectStatusTab>
@@ -136,7 +130,9 @@ export const ProjectListClient = ({
               </Text>
             );
           }
-          return <ProjectListItems projects={visibleProjects} />;
+          return (
+            <ProjectListItems projects={visibleProjects} from="projects" />
+          );
         }}
       />
     </Stack>
