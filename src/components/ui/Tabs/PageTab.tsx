@@ -22,14 +22,21 @@ export const PageTab = <T extends string>({
   tabWidth = 120,
   renderPanel,
 }: Props<T>) => {
-  if (items.length === 0) {
-    return <>{null}</>;
-  }
+  if (items.length === 0) return null;
+  const safeValue = items.some((it) => it.value === value)
+    ? value
+    : items[0].value;
+
   return (
-    <Tabs value={value} onChange={(v) => onChange(v as T)}>
+    <Tabs
+      value={safeValue}
+      onChange={(v) => {
+        if (v) onChange(v as T);
+      }}
+    >
       <Tabs.List>
         {items.map((it) => {
-          const isActive = it.value === value;
+          const isActive = it.value === safeValue;
 
           return (
             <Tabs.Tab
@@ -52,8 +59,8 @@ export const PageTab = <T extends string>({
         })}
       </Tabs.List>
 
-      <Tabs.Panel value={value} pt="sm">
-        {renderPanel(value)}
+      <Tabs.Panel value={safeValue} pt="sm">
+        {renderPanel(safeValue)}
       </Tabs.Panel>
     </Tabs>
   );

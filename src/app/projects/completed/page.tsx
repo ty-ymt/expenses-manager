@@ -8,7 +8,7 @@ export const ProjectPage = async () => {
   return (
     <>
       <Title order={2} mb="md">
-        完了案件一覧
+        完了済案件一覧
       </Title>
 
       <CompletedProjectListClient projects={projects} />

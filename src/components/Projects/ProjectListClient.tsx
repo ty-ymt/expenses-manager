@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import {
   filterProjectsByDateOverlap,
+  filterProjectsByQuery,
   filterProjectsByStatus,
 } from "@/lib/filters";
 import {
@@ -19,6 +20,7 @@ import {
 import DateRangeFilterButton from "../ui/Filter/DateRangeFilterButton";
 import { StatusFilterButton } from "../ui/Filter/StatusFilterButton";
 import ForwardLink from "../ui/ForwardLink";
+import SearchBox from "../ui/SearchBox";
 import { PageTab, type TabItem } from "../ui/Tabs/PageTab";
 import ProjectListItems from "./ProjectListItems";
 
@@ -27,33 +29,51 @@ export const ProjectListClient = ({
 }: {
   projects: ProjectListItem[];
 }) => {
+  // --------------------
+  // state
+  // --------------------
   const [activeTab, setActiveTab] = useState<ProjectStatusTab>("all");
   const [selected, setSelected] = useState<ProjectStatus[]>([]);
   const [range, setRange] = useState<DateRangeFilter>({ from: null, to: null });
+  const [query, setQuery] = useState("");
 
-  const isDateRangeFiltering = !!range.from || !!range.to;
   const isAllTab = activeTab === "all";
+  const isDateRangeFiltering = !!range.from || !!range.to;
   const isStatusFiltering = isAllTab && selected.length > 0;
 
-  const tabProjects = useMemo(
+  // --------------------
+  // base (完了案件は一覧には出さない)
+  // --------------------
+  const baseProjects = useMemo(
     () => projects.filter((p) => p.status !== PROJECT_STATUS.COMPLETED),
-    [projects]
+    [projects],
   );
 
-  const dateFiltered = useMemo(
-    () => filterProjectsByDateOverlap(projects, range),
-    [projects, range]
+  // --------------------
+  // filters
+  // --------------------
+  const rangeFiltered = useMemo(
+    () => filterProjectsByDateOverlap(baseProjects, range),
+    [baseProjects, range],
+  );
+
+  const queryFiltered = useMemo(
+    () => filterProjectsByQuery(rangeFiltered, query),
+    [rangeFiltered, query],
   );
 
   const visibleProjects = useMemo(() => {
     if (activeTab === "all")
-      return filterProjectsByStatus(dateFiltered, selected);
-    return dateFiltered.filter((p) => p.status === activeTab);
-  }, [activeTab, dateFiltered, selected]);
+      return filterProjectsByStatus(queryFiltered, selected);
+    return queryFiltered.filter((p) => p.status === activeTab);
+  }, [activeTab, queryFiltered, selected]);
 
+  // --------------------
+  // tabs
+  // --------------------
   const counts = useMemo(() => {
     const c: Record<ProjectStatusTab, number> = {
-      all: dateFiltered.length,
+      all: queryFiltered.length,
       undecided: 0,
       not_started: 0,
       in_progress: 0,
@@ -61,27 +81,31 @@ export const ProjectListClient = ({
       completed: 0,
     };
 
-    for (const p of dateFiltered) {
-      c[p.status] = (c[p.status] ?? 0) + 1;
+    for (const p of queryFiltered) {
+      c[p.status] += 1;
     }
     return c;
-  }, [dateFiltered]);
+  }, [queryFiltered]);
 
   const tabItems = useMemo((): TabItem<ProjectStatusTab>[] => {
     return [
       { value: "all", label: "すべて", count: counts.all },
       ...PROJECT_STATUS_TABS.map((s) => ({
-        value: s as ProjectStatusTab,
+        value: s,
         label: PROJECT_STATUS_LABEL[s],
-        count: counts[s as ProjectStatusTab] ?? 0,
+        count: counts[s],
       })),
     ];
   }, [counts]);
 
+  // --------------------
+  // render
+  // --------------------
   return (
     <Stack gap="sm">
       <Group justify="space-between" align="flex-end">
         <Group gap="sm" align="flex-end">
+          <SearchBox value={query} onChange={setQuery} w={260} />
           <DateRangeFilterButton
             value={range}
             setValue={setRange}
@@ -95,8 +119,8 @@ export const ProjectListClient = ({
           />
         </Group>
 
-        <Stack gap="sm" align="end">
-          <ForwardLink href="/projects/completed" label="完了案件" />
+        <Stack gap="xs" align="end">
+          <ForwardLink href="/projects/completed" label="完了済案件一覧" />
 
           <Button
             component={Link}
@@ -115,7 +139,7 @@ export const ProjectListClient = ({
         items={tabItems}
         tabWidth={128}
         renderPanel={() => {
-          if (tabProjects.length === 0) {
+          if (baseProjects.length === 0) {
             return (
               <Text size="sm" c="dimmed">
                 案件が登録されていません
@@ -131,7 +155,7 @@ export const ProjectListClient = ({
             );
           }
           return (
-            <ProjectListItems projects={visibleProjects} from="projects" />
+            <ProjectListItems projects={visibleProjects} returnTo="/projects" />
           );
         }}
       />

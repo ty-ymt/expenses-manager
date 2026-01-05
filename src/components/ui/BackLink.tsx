@@ -5,11 +5,17 @@ import { IconChevronLeft } from "@tabler/icons-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
-export const BackLink = ({ label = "一覧へ戻る" }: { label?: string }) => {
+export const BackLink = ({
+  defaultHref,
+  label = "一覧へ戻る",
+}: {
+  defaultHref: string;
+  label?: string;
+}) => {
   const sp = useSearchParams();
-  const from = sp.get("from");
+  const returnTo = sp.get("returnTo");
 
-  const href = from === "completed" ? "/projects/completed" : "/projects";
+  const href = returnTo ? decodeURIComponent(returnTo) : defaultHref;
   return (
     <Link href={href} style={{ textDecoration: "none", cursor: "pointer" }}>
       <Group gap={4}>

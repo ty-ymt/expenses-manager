@@ -8,17 +8,18 @@ import ProjectStatusBadge from "./ProjectStatusBadge";
 
 export const ProjectListItems = ({
   projects,
-  from = "projects",
+  returnTo,
 }: {
   projects: ProjectListItem[];
-  from?: "projects" | "completed";
+  returnTo: string;
 }) => {
+  const rt = encodeURIComponent(returnTo);
   return (
     <Stack gap="xs">
       {projects.map((p) => (
         <Paper
           component={Link}
-          href={`/projects/${p.id}?from=${from}`}
+          href={`/projects/${p.id}?returnTo=${rt}`}
           key={p.id}
           p="md"
           withBorder

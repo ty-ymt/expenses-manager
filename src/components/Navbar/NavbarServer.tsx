@@ -10,11 +10,19 @@ export const NavbarServer = async () => {
       icon: "projects",
       children: [
         { label: "案件一覧", href: "/projects" },
-        { label: "完了案件一覧", href: "/projects/completed" },
+        { label: "完了済案件一覧", href: "/projects/completed" },
         { label: "新規案件登録", href: "/projects/add" },
       ],
     },
-    { label: "経費管理", href: "/expenses", icon: "expenses" },
+    {
+      label: "経費管理",
+      icon: "expenses",
+      children: [
+        { label: "経費一覧", href: "/expenses" },
+        { label: "完了済経費一覧", href: "/expenses/completed" },
+        { label: "費目管理", href: "/expenses/categories" },
+      ],
+    },
   ];
 
   const MenuItems: HeaderMenuItem[] =
