@@ -94,21 +94,19 @@ export default async function ExpenseProjectDetailPage({
                   </Group>
 
                   <Table withTableBorder withColumnBorders highlightOnHover>
-                    <Table.Thead>
-                      <Table.Tr>
-                        <Table.Th style={{ width: 140 }}>日付</Table.Th>
-                        <Table.Th>備考</Table.Th>
-                        <Table.Th style={{ width: 160, textAlign: "right" }}>
-                          金額
-                        </Table.Th>
-                      </Table.Tr>
-                    </Table.Thead>
+                    <thead>
+                      <tr>
+                        <th style={{ width: 140 }}>日付</th>
+                        <th>備考</th>
+                        <th style={{ width: 160, textAlign: "right" }}>金額</th>
+                      </tr>
+                    </thead>
 
-                    <Table.Tbody>
+                    <tbody>
                       {g.items.map((it) => (
-                        <Table.Tr key={it.id}>
-                          <Table.Td>{formatDate(it.receipt_date)}</Table.Td>
-                          <Table.Td>
+                        <tr key={it.id}>
+                          <td>{formatDate(it.receipt_date)}</td>
+                          <td>
                             {it.remarks ? (
                               <Text style={{ whiteSpace: "pre-wrap" }}>
                                 {it.remarks}
@@ -118,13 +116,13 @@ export default async function ExpenseProjectDetailPage({
                                 （なし）
                               </Text>
                             )}
-                          </Table.Td>
-                          <Table.Td style={{ textAlign: "right" }}>
+                          </td>
+                          <td style={{ textAlign: "right" }}>
                             {formatJPY(it.amount)}
-                          </Table.Td>
-                        </Table.Tr>
+                          </td>
+                        </tr>
                       ))}
-                    </Table.Tbody>
+                    </tbody>
                   </Table>
                 </Stack>
               ))}

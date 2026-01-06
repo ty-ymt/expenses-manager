@@ -34,7 +34,7 @@ export default function ExpenseEditClient({
   initialRows: ExpenseEditRow[];
 }) {
   const [rows, setRows] = useState<ExpenseEditRow[]>(
-    initialRows.length > 0 ? initialRows : [emptyRow()],
+    initialRows.length > 0 ? initialRows : [emptyRow()]
   );
 
   const [isPending, startTransition] = useTransition();
@@ -83,7 +83,7 @@ export default function ExpenseEditClient({
 
       // 既存行は削除フラグ
       const next = prev.map((r, i) =>
-        i === realIdx ? { ...r, _delete: true } : r,
+        i === realIdx ? { ...r, _delete: true } : r
       );
       const remaining = next.filter((x) => !x._delete);
       return remaining.length > 0 ? next : [emptyRow()];
@@ -157,7 +157,6 @@ export default function ExpenseEditClient({
                 update(idx, { amount: v === "" ? "" : String(v) })
               }
               min={0}
-              decimalScale={2}
               fixedDecimalScale
               thousandSeparator=","
               w={160}

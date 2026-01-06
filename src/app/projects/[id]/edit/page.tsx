@@ -25,7 +25,7 @@ export const ProjectEditPage = async ({
     <>
       <Group justify="space-between" align="flex-end" mb="md">
         <Title order={2}>案件編集</Title>
-        <BackLink href={`/projects/${project.id}`} label="詳細へ戻る" />
+        <BackLink defaultHref={`/projects/${project.id}`} label="詳細へ戻る" />
       </Group>
 
       <ProjectEditForm
