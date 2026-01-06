@@ -3,7 +3,7 @@
 import { Group, Text } from "@mantine/core";
 import { IconChevronLeft } from "@tabler/icons-react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export const BackLink = ({
   defaultHref,
@@ -12,10 +12,14 @@ export const BackLink = ({
   defaultHref: string;
   label?: string;
 }) => {
-  const sp = useSearchParams();
-  const returnTo = sp.get("returnTo");
+  const [href, setHref] = useState(defaultHref);
 
-  const href = returnTo ? decodeURIComponent(returnTo) : defaultHref;
+  useEffect(() => {
+    const sp = new URLSearchParams(window.location.search);
+    const returnTo = sp.get("returnTo");
+    if (returnTo) setHref(returnTo);
+  }, []);
+
   return (
     <Link href={href} style={{ textDecoration: "none", cursor: "pointer" }}>
       <Group gap={4}>
