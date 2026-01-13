@@ -1,22 +1,7 @@
-import { prisma } from "@/lib/platform/prisma";
-import createClient from "@/lib/platform/supabaseServer";
+import type { Profile } from "@/types/header";
 import HeaderClient from "./HeaderClient";
 
-export const getHeaderUser = async () => {
-  const supabase = await createClient();
-  const { data } = await supabase.auth.getUser();
-  const userId = data.user?.id;
-  if (!userId) return null;
-
-  return prisma.profile.findFirst({
-    where: { auth_id: userId, deleted_at: null },
-    select: { name: true, email: true },
-  });
-};
-
-export const HeaderServer = async () => {
-  const profile = await getHeaderUser();
-
+export const HeaderServer = async ({ profile }: { profile: Profile }) => {
   return (
     <HeaderClient
       displayName={(profile?.name ?? "").trim()}

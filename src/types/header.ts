@@ -1,4 +1,4 @@
-export type Role = "admin" | "user" | "guest";
+export type Role = "admin" | "user";
 export type MenuIcon = "projects" | "expenses" | "users";
 
 export type HeaderMenuItem = {
@@ -15,4 +15,10 @@ export type UserMenuItem = {
 
 export type UserMenuProps = UserMenuItem & {
   onSignOut: () => void | Promise<void>;
+};
+
+export type Profile = {
+  name: string;
+  email: string;
+  role: Role;
 };
