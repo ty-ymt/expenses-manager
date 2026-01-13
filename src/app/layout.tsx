@@ -9,10 +9,6 @@ import {
 } from "@mantine/core";
 import { ModalsProvider } from "@mantine/modals";
 import type { Metadata } from "next";
-import HeaderServer from "@/components/Header/HeaderServer";
-import NavbarServer from "@/components/Navbar/NavbarServer";
-import Main from "@/components/Shell/Main";
-import ShellClient from "@/components/Shell/ShellClient";
 
 export const metadata: Metadata = {
   title: "Expenses Manager",
@@ -31,13 +27,7 @@ export default function RootLayout({
       </head>
       <body>
         <MantineProvider defaultColorScheme="auto">
-          <ModalsProvider>
-            <ShellClient>
-              <HeaderServer />
-              <NavbarServer />
-              <Main>{children}</Main>
-            </ShellClient>
-          </ModalsProvider>
+          <ModalsProvider>{children}</ModalsProvider>
         </MantineProvider>
       </body>
     </html>

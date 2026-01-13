@@ -1,5 +1,5 @@
 import { Group, Stack, Title } from "@mantine/core";
-import DeletedCategoryEditorClient from "@/components/Expenses/Categories/DeletedCategoryEdirorClient";
+import DeletedCategoryEditorClient from "@/components/Expenses/Categories/DeletedCategoryEditorClient";
 import { BackLink } from "@/components/ui/BackLink";
 import { getDeletedCategories } from "@/lib/expenses/categories/queries";
 

@@ -2,24 +2,20 @@
 
 import { Avatar, Box, Group, Menu, Text, UnstyledButton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import type { UserMenuItem } from "@/types/header";
+import type { UserMenuProps } from "@/types/header";
 
 export const UserMenu = ({
   displayName,
   displayEmail,
-}: //onSignOut,
-UserMenuItem) => {
+  onSignOut,
+}: UserMenuProps) => {
   const [opened, { toggle, close }] = useDisclosure(false);
-
   const initial = displayName.charAt(0);
 
-  // const handleSignOut = async () => {
-  //   try {
-  //     await onSignOut?.();
-  //   } finally {
-  //     close();
-  //   }
-  // };
+  const handleSignOut = async () => {
+    await onSignOut();
+    close();
+  };
 
   return (
     <Menu
@@ -59,10 +55,7 @@ UserMenuItem) => {
 
         <Menu.Divider />
 
-        <Menu.Item
-          color="red"
-          //onClick={handleSignOut}
-        >
+        <Menu.Item color="red" onClick={handleSignOut}>
           Sign out
         </Menu.Item>
       </Menu.Dropdown>

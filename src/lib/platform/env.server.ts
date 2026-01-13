@@ -1,3 +1,5 @@
+import "server-only";
+
 const getEnv = (key: string): string => {
   const value = process.env[key];
   if (!value) {
@@ -6,6 +8,5 @@ const getEnv = (key: string): string => {
   return value;
 };
 
-export const supabaseUrl = getEnv("NEXT_PUBLIC_SUPABASE_URL");
-export const supabaseAnonKey = getEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY");
+export const supabaseServiceRoleKey = getEnv("SUPABASE_SERVICE_ROLE_KEY");
 export const databaseUrl = getEnv("DATABASE_URL");

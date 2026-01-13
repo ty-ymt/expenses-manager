@@ -6,6 +6,11 @@ datasource db {
   provider = "postgresql"
 }
 
+enum UserRole {
+  admin
+  user
+}
+
 model Project {
   id           BigInt    @id @default(autoincrement())
   cd           String    @unique @db.VarChar(40)
@@ -35,32 +40,25 @@ model Expense {
 
 model Category {
   id         BigInt    @id @default(autoincrement())
-  name       String    @db.VarChar(255)
+  name       String    @unique @db.VarChar(255)
   sort       Int?
-  deleted_at DateTime? @db.Timestamptz
   created_at DateTime  @default(now()) @db.Timestamptz
   updated_at DateTime  @updatedAt @db.Timestamptz
+  deleted_at DateTime? @db.Timestamptz
   expenses   Expense[]
 
-  @@unique([name])
+  @@index([deleted_at])
 }
 
 model Profile {
-  id         BigInt   @id @default(autoincrement())
-  auth_id    String   @db.Uuid
-  name       String   @db.VarChar(255)
-  email      String   @db.VarChar(255)
-  role_id    BigInt
-  role       Role     @relation(fields: [role_id], references: [id])
-  created_at DateTime @default(now()) @db.Timestamptz
-  updated_at DateTime @updatedAt @db.Timestamptz
-}
+  id         BigInt    @id @default(autoincrement())
+  auth_id    String    @unique @db.Uuid
+  name       String    @db.VarChar(255)
+  email      String    @unique @db.VarChar(255)
+  role       UserRole  @default(user)
+  created_at DateTime  @default(now()) @db.Timestamptz
+  updated_at DateTime  @updatedAt @db.Timestamptz
+  deleted_at DateTime? @db.Timestamptz
 
-model Role {
-  id          BigInt    @id @default(autoincrement())
-  name        String    @db.VarChar(255)
-  description String?   @db.Text
-  created_at  DateTime  @default(now()) @db.Timestamptz
-  updated_at  DateTime  @updatedAt @db.Timestamptz
-  profiles    Profile[]
+  @@index([deleted_at])
 }

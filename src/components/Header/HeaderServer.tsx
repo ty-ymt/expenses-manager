@@ -1,24 +1,28 @@
-import type { Role } from "@/types/header";
+import { prisma } from "@/lib/platform/prisma";
+import createClient from "@/lib/platform/supabaseServer";
 import HeaderClient from "./HeaderClient";
 
-type HeaderUser = {
-  name: string | null;
-  email: string | null;
-  role: Role;
+export const getHeaderUser = async () => {
+  const supabase = await createClient();
+  const { data } = await supabase.auth.getUser();
+  const userId = data.user?.id;
+  if (!userId) return null;
+
+  return prisma.profile.findFirst({
+    where: { auth_id: userId, deleted_at: null },
+    select: { name: true, email: true },
+  });
 };
 
 export const HeaderServer = async () => {
-  //TODO: Supabaseで取得
-  const user: HeaderUser = {
-    name: "山本 哲也",
-    email: "yamamoto.tetsuya@coresite.ne.jp",
-    role: "admin",
-  };
+  const profile = await getHeaderUser();
 
-  const displayName = (user.name ?? "").trim();
-  const displayEmail = (user.email ?? "").trim();
-
-  return <HeaderClient displayName={displayName} displayEmail={displayEmail} />;
+  return (
+    <HeaderClient
+      displayName={(profile?.name ?? "").trim()}
+      displayEmail={(profile?.email ?? "").trim()}
+    />
+  );
 };
 
 export default HeaderServer;

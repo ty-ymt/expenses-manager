@@ -46,7 +46,7 @@ export const ProjectListClient = ({
   // --------------------
   const baseProjects = useMemo(
     () => projects.filter((p) => p.status !== PROJECT_STATUS.COMPLETED),
-    [projects],
+    [projects]
   );
 
   // --------------------
@@ -54,12 +54,12 @@ export const ProjectListClient = ({
   // --------------------
   const rangeFiltered = useMemo(
     () => filterProjectsByDateOverlap(baseProjects, range),
-    [baseProjects, range],
+    [baseProjects, range]
   );
 
   const queryFiltered = useMemo(
     () => filterProjectsByQuery(rangeFiltered, query),
-    [rangeFiltered, query],
+    [rangeFiltered, query]
   );
 
   const visibleProjects = useMemo(() => {

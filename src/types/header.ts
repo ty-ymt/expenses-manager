@@ -11,5 +11,8 @@ export type HeaderMenuItem = {
 export type UserMenuItem = {
   displayName: string;
   displayEmail: string;
-  //onSignOut: () => Promise<void> | void;
+};
+
+export type UserMenuProps = UserMenuItem & {
+  onSignOut: () => void | Promise<void>;
 };
