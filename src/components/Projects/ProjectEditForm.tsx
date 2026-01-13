@@ -17,7 +17,7 @@ import { useActionState, useState } from "react";
 import {
   deleteProjectAction,
   updateProjectAction,
-} from "@/app/projects/[id]/edit/actions";
+} from "@/app/(app)/projects/[id]/edit/actions";
 import type { ActionState, ProjectEditFormData } from "@/types/projects";
 import FormActions from "../ui/Form/FormActions";
 import {
